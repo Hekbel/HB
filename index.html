@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HEKBEL - Evolución Web & Portfolio (2007 - 2026)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;800;900&family=Roboto:wght@300;400;700&family=Tahoma&display=swap" rel="stylesheet">
+  
+  <style>
+    /* =========================================================
+       ESTILOS BASE & PANTALLA DE CARGA TIPO WINDOWS
+       ========================================================= */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #000;
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Pantalla de carga Windows con Logo HEKBEL */
+    #windows-boot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #3a96dd;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .boot-logo-container {
+      width: 160px;
+      height: 160px;
+      margin-bottom: 25px;
+      animation: pulseLogo 2s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseLogo {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      100% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 15px rgba(255,255,255,0.4)); }
+    }
+
+    .boot-title {
+      font-size: 24px;
+      letter-spacing: 4px;
+      color: #e0e0e0;
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .boot-sub {
+      font-size: 12px;
+      color: #777;
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .windows-loader {
+      width: 240px;
+      height: 6px;
+      background: #111;
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid #333;
+    }
+
+    .windows-bar {
+      position: absolute;
+      left: -50%;
+      height: 100%;
+      width: 40%;
+      background: linear-gradient(90deg, transparent, #3a96dd, #ffffff, #3a96dd, transparent);
+      animation: loadingBar 2s infinite ease-in-out;
+    }
+
+    @keyframes loadingBar {
+      0% { left: -50%; }
+      100% { left: 100%; }
+    }
+
+    .boot-status {
+      margin-top: 15px;
+      font-size: 11px;
+      color: #666;
+      font-family: monospace;
+    }
+
+    /* SVG HEKBEL Metalizado */
+    .hekbel-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.7));
+    }
+
+    /* =========================================================
+       CONTROLES FLOTANTES TIPO BURBUJA (INFERIOR DERECHO)
+       ========================================================= */
+    #floating-controls {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .time-bubble {
+      background: rgba(15, 15, 20, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 10px 16px;
+      border-radius: 30px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+    }
+
+    .year-badge {
+      font-weight: 800;
+      font-size: 15px;
+      padding: 4px 10px;
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      border-radius: 15px;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px rgba(0,114,255,0.4);
+    }
+
+    .btn-time {
+      background: #22252a;
+      border: 1px solid #444;
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-time:hover {
+      background: #333842;
+      border-color: #00c6ff;
+      transform: translateY(-1px);
+    }
+
+    .btn-time:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .theme-toggle-container {
+      display: none; /* Se activa dinámicamente desde 2018 */
+    }
+
+    .btn-theme {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      backdrop-filter: blur(5px);
+      transition: all 0.2s ease;
+    }
+
+    .btn-theme:hover {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Provider watermark */
+    .provider-mention {
+      font-size: 10px;
+      color: #aaa;
+      background: rgba(0,0,0,0.6);
+      padding: 3px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* =========================================================
+       CONTENEDOR DE SECCIONES POR ÉPOCA
+       ========================================================= */
+    .era-section {
+      display: none;
+      width: 100%;
+      min-height: 100vh;
+      animation: eraFadeIn 0.6s ease forwards;
+    }
+
+    .era-section.active {
+      display: block;
+    }
+
+    @keyframes eraFadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* =========================================================
+       ÉPOCA 1: 2007 (Web 2.0 / Aqua / Glossy / Table Vibe)
+       ========================================================= */
+    .era-2007 {
+      background: #d4e4f7 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="20" height="20" fill="%23d4e4f7"/><circle cx="2" cy="2" r="1" fill="%23b0c8e8"/></svg>');
+      color: #222;
+      font-family: 'Tahoma', 'Verdana', sans-serif;
+      padding: 20px;
+    }
+
+    .era-2007 .wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      border: 3px double #3b6e8c;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      padding: 15px;
+    }
+
+    .era-2007 header {
+      background: linear-gradient(180deg, #6ba1c3 0%, #3a759e 50%, #205072 100%);
+      color: #fff;
+      padding: 20px;
+      border-radius: 8px 8px 0 0;
+      text-shadow: 1px 1px 2px #000;
+      border-bottom: 3px solid #f29100;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .era-2007 .glossy-btn {
+      background: linear-gradient(180deg, #99e65b 0%, #52a818 50%, #34700d 100%);
+      color: #fff;
+      border: 1px solid #234f07;
+      padding: 8px 16px;
+      border-radius: 15px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 2px 4px rgba(0,0,0,0.3);
+      display: inline-block;
+      font-size: 12px;
+    }
+
+    .era-2007 .glossy-btn:hover {
+      background: linear-gradient(180deg, #b0f279 0%, #61c41d 50%, #3c820f 100%);
+    }
+
+    .era-2007 .badge-2007 {
+      background: #ffffcc;
+      border: 1px dashed #ff9900;
+      padding: 10px;
+      margin: 15px 0;
+      font-size: 11px;
+    }
+
+    .era-2007 table.layout {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .era-2007 table.layout td {
+      vertical-align: top;
+      padding: 10px;
+    }
+
+    .era-2007 .sidebar {
+      width: 240px;
+      background: #f0f4f8;
+      border: 1px solid #b2c8d9;
+      padding: 10px;
+    }
+
+    .era-2007 h2 {
+      font-size: 16px;
+      color: #1f4f70;
+      border-bottom: 2px solid #3a759e;
+      padding-bottom: 3px;
+      margin-bottom: 10px;
+    }
+
+    .era-2007 marquee {
+      background: #3a759e;
+      color: #fff;
+      padding: 4px;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    /* =========================================================
+       ÉPOCA 2: 2011 (Skeuomorphism / Textures / Ribbon / Web Fonts)
+       ========================================================= */
+    .era-2011 {
+      background: #2d2620 url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKfP3/+z4AE0xmYGLAJSACmAC4BNwEzAABx/QgLogJllAAAAABJRU55AKFAAE_') repeat;
+      color: #333;
+      font-family: 'Georgia', serif;
+      padding: 30px 10px;
+    }
+
+    .era-2011 .container {
+      max-width: 940px;
+      margin: 0 auto;
+      background: #fdfbf7;
+      border-radius: 6px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 2px rgba(255,255,255,0.8);
+      border: 1px solid #cfc8be;
+      overflow: hidden;
+    }
+
+    .era-2011 header {
+      background: linear-gradient(to bottom, #4a3b32, #2c211b);
+      color: #f0e6d2;
+      padding: 25px;
+      position: relative;
+      border-bottom: 4px solid #8c2b2b;
+      box-shadow: inset 0 -5px 10px rgba(0,0,0,0.5);
+    }
+
+    .era-2011 .ribbon {
+      position: absolute;
+      top: 15px;
+      right: -10px;
+      background: #8c2b2b;
+      color: #fff;
+      padding: 6px 15px;
+      font-size: 12px;
+      font-family: Arial, sans-serif;
+      box-shadow: -2px 2px 5px rgba(0,0,0,0.4);
+    }
+
+    .era-2011 .paper-card {
+      background: #fff;
+      border: 1px solid #e0dad0;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      border-radius: 4px;
+    }
+
+    .era-2011 .btn-stitched {
+      background: #5b798e;
+      color: #fff;
+      padding: 10px 20px;
+      border: 2px dashed #ffffff;
+      box-shadow: 0 0 0 4px #5b798e, 2px 2px 5px rgba(0,0,0,0.3);
+      text-decoration: none;
+      display: inline-block;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      font-weight: bold;
+      border-radius: 3px;
+      margin-top: 10px;
+    }
+
+    /* =========================================================
+       ÉPOCA 3: 2015 (Material Design / Clean Flat / Cards)
+       ========================================================= */
+    .era-2015 {
+      background: #eef2f5;
+      color: #37474f;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .era-2015 header {
+      background: #009688;
+      color: #fff;
+      padding: 40px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .era-2015 .header-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .era-2015 .main-container {
+      max-width: 1000px;
+      margin: -20px auto 40px;
+      padding: 0 15px;
+    }
+
+    .era-2015 .card {
+      background: #fff;
+      border-radius: 2px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.16), 0 2px 10px rgba(0,0,0,0.12);
+    }
+
+    .era-2015 h2 {
+      color: #00796b;
+      font-weight: 400;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+
+    .era-2015 .flat-btn {
+      background: #ff4081;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    /* =========================================================
+       ÉPOCA 4: 2018 (Neomorphism / Dark Aesthetic / Gamer Accent)
+       ========================================================= */
+    .era-2018 {
+      background: #18191c;
+      color: #e1e3e6;
+      font-family: 'Inter', sans-serif;
+      padding-bottom: 60px;
+    }
+
+    /* Soporte modo claro/oscuro para 2018+ */
+    body.light-mode .era-2018 {
+      background: #e6e8ec;
+      color: #1a1a1a;
+    }
+
+    body.light-mode .era-2018 .neo-card {
+      background: #e6e8ec;
+      box-shadow: 8px 8px 16px #c4c6ca, -8px -8px 16px #ffffff;
+      color: #222;
+    }
+
+    .era-2018 .neo-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 30px 15px;
+    }
+
+    .era-2018 .neo-card {
+      background: #18191c;
+      border-radius: 16px;
+      box-shadow: 8px 8px 20px #121315, -8px -8px 20px #1e1f23;
+      padding: 30px;
+      margin-bottom: 25px;
+    }
+
+    .era-2018 .accent-bar {
+      height: 4px;
+      background: linear-gradient(90deg, #ff0055, #7a00ff);
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
+
+    .era-2018 .tag {
+      background: rgba(122, 0, 255, 0.2);
+      color: #a855f7;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    /* =========================================================
+       ÉPOCA 5: 2022 (Glassmorphism / Bento Grid / Modern Purple)
+       ========================================================= */
+    .era-2022 {
+      background: #08070d;
+      background-image: radial-gradient(circle at 10% 20%, rgba(120, 50, 255, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(0, 200, 255, 0.15) 0%, transparent 40%);
+      color: #f0f0f5;
+      font-family: 'Inter', sans-serif;
+      padding: 40px 15px;
+    }
+
+    body.light-mode .era-2022 {
+      background: #f4f3f8;
+      color: #111;
+    }
+
+    body.light-mode .era-2022 .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: #111;
+    }
+
+    .era-2022 .bento-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+    }
+
+    .era-2022 .glass-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .era-2022 .span-12 { grid-column: span 12; }
+    .era-2022 .span-8 { grid-column: span 8; }
+    .era-2022 .span-4 { grid-column: span 4; }
+    .era-2022 .span-6 { grid-column: span 6; }
+
+    @media (max-width: 768px) {
+      .era-2022 .span-8, .era-2022 .span-4, .era-2022 .span-6 { grid-column: span 12; }
+    }
+
+    /* =========================================================
+       ÉPOCA 6: 2026 (Spatial HUD / Futuristic Cyber-Core / Quetzal)
+       ========================================================= */
+    .era-2026 {
+      background: #030408;
+      color: #e2e8f0;
+      font-family: 'Orbitron', 'Inter', sans-serif;
+      padding-bottom: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body.light-mode .era-2026 {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    body.light-mode .era-2026 .hud-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(0, 150, 255, 0.3);
+      color: #0f172a;
+    }
+
+    .era-2026 .cyber-grid {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: linear-gradient(rgba(0, 210, 255, 0.05) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0, 210, 255, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .era-2026 .hud-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .era-2026 .hud-card {
+      background: rgba(10, 15, 26, 0.75);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.08);
+      position: relative;
+      backdrop-filter: blur(10px);
+    }
+
+    .era-2026 .hud-card::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 20px; width: 60px; height: 3px;
+      background: #00e5ff;
+      box-shadow: 0 0 10px #00e5ff;
+    }
+
+    .era-2026 .ticker {
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      padding: 10px;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      color: #00e5ff;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+    }
+
+    /* Redes Sociales Generales */
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .social-btn {
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.2s ease;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-wa { background: #25D366; color: #fff; }
+    .btn-tg { background: #0088cc; color: #fff; }
+    .btn-gm { background: #EA4335; color: #fff; }
+    .btn-fb { background: #1877F2; color: #fff; }
+    .btn-ig { background: #E4405F; color: #fff; }
+    .btn-tk { background: #000000; color: #fff; border: 1px solid #333; }
+    .btn-yt { background: #FF0000; color: #fff; }
+    .btn-x  { background: #14171A; color: #fff; }
+    .btn-tw { background: #9146FF; color: #fff; }
+
+    .btn-cv {
+      background: linear-gradient(135deg, #ffd700, #ffa500);
+      color: #000;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+      display: inline-block;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       PANTALLA DE CARGA WINDOWS DE HEKBEL OS
+       ========================================================= -->
+  <div id="windows-boot">
+    <div class="boot-logo-container">
+      <!-- SVG Replica del Logo HEKBEL (Metalizado Hexagonal HB) -->
+      <svg class="hekbel-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="metalGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="30%" stop-color="#b8c6db"/>
+            <stop offset="70%" stop-color="#f5f7fa"/>
+            <stop offset="100%" stop-color="#6d7d93"/>
+          </linearGradient>
+          <linearGradient id="metalGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#4e542e"/>
+            <stop offset="50%" stop-color="#d4af37"/>
+            <stop offset="100%" stop-color="#ffffff"/>
+          </linearGradient>
+        </defs>
+        <!-- Marco Hexagonal Isometrico -->
+        <path d="M100 15 L165 52 L165 128 L100 165 L35 128 L35 52 Z" stroke="url(#metalGrad1)" stroke-width="8" fill="none"/>
+        <!-- Interlocking H & B geometric bars -->
+        <path d="M60 55 L80 55 L80 125 L60 125 Z" fill="url(#metalGrad1)"/>
+        <path d="M80 82 L125 60 L140 70 L95 92 Z" fill="url(#metalGrad1)"/>
+        <path d="M120 55 L140 55 L140 125 L120 125 Z" fill="url(#metalGrad1)"/>
+        <path d="M80 115 L125 93 L140 103 L95 125 Z" fill="url(#metalGrad1)"/>
+        <!-- HEKBEL Text -->
+        <text x="100" y="188" font-family="'Orbitron', sans-serif" font-size="18" font-weight="900" fill="url(#metalGrad1)" text-anchor="middle" letter-spacing="3">HEKBEL</text>
+      </svg>
+    </div>
+    <div class="boot-title">HEKBEL OS</div>
+    <div class="boot-sub">Iniciando Archivos Web (2007 - 2026)</div>
+    <div class="windows-loader">
+      <div class="windows-bar"></div>
+    </div>
+    <div class="boot-status" id="boot-status-text">Cargando módulos de diseño web 2007...</div>
+  </div>
+
+  <!-- =========================================================
+       PANEL DE CONTROL FLOTANTE BURBUJA (INFERIOR DERECHO)
+       ========================================================= -->
+  <div id="floating-controls">
+    <div class="provider-mention">Proveedor: QuetzalNexuz Corp</div>
+    
+    <div class="theme-toggle-container" id="theme-toggle-box">
+      <button class="btn-theme" id="theme-btn" title="Cambiar Modo Claro/Oscuro">🌙</button>
+    </div>
+
+    <div class="time-bubble">
+      <button class="btn-time" id="btn-downgrade" onclick="changeYear(-1)">◄ Downgrade</button>
+      <div class="year-badge" id="current-year-badge">2007</div>
+      <button class="btn-time" id="btn-upgrade" onclick="changeYear(1)">Upgrade ►</button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SECCIÓN 1: AÑO 2007 (Estilo Web 2.0 / Glossy / Aquaimg)
+       ========================================================= -->
+  <section id="era-2007" class="era-section era-2007 active">
+    <div class="wrapper">
+      <marquee>¡Bienvenido al sitio oficial de HEKBEL! | Optimizado para Internet Explorer 7 y Firefox 2.0 a 1024x768 | Creado con tecnología Web 2.0</marquee>
+      
+      <header>
+        <div style="width:70px; height:70px;">
+          <svg viewBox="0 0 200 200"><path d="M100 15 L165 52 L165 128 L100 165 L35 128 L35 52 Z" stroke="#fff" stroke-width="10" fill="none"/><text x="100" y="115" font-size="70" fill="#fff" text-anchor="middle" font-weight="bold">H</text></svg>
+        </div>
+        <div>
+          <h1 style="font-size:26px; font-weight:bold;">HEKBEL - Portal Personal 2007</h1>
+          <p style="font-size:12px; opacity:0.9;">Héctor José García Belisario | Programación, Electrónica y Proyectos</p>
+        </div>
+      </header>
+
+      <div class="badge-2007">
+        <strong>🎨 Tendencias Visuales de 2007:</strong> Botones con reflejo Aqua Glossy, degradados azulados marcados, tablas de diagramación, contadores de visitas GIF y formato cuadrado Web 2.0.
+      </div>
+
+      <table class="layout">
+        <tr>
+          <td class="sidebar">
+            <h2>Navegación</h2>
+            <ul style="list-style:none; line-height:2;">
+              <li><a href="#" class="glossy-btn" style="width:100%; text-align:center;">Inicio</a></li>
+              <li><a href="#perfil-2007" class="glossy-btn" style="width:100%; text-align:center; margin-top:5px;">Sobre Mí</a></li>
+              <li><a href="#tech-2007" class="glossy-btn" style="width:100%; text-align:center; margin-top:5px;">Electrónica DIY</a></li>
+            </ul>
+
+            <h2 style="margin-top:20px;">Contador</h2>
+            <div style="background:#000; color:#00ff00; font-family:monospace; padding:5px; text-align:center; font-size:16px;">
+              0 0 4 8 2 9
+            </div>
+
+            <h2 style="margin-top:20px;">Contacto 2007</h2>
+            <p style="font-size:11px;">Escríbeme por Gmail o MSN Messenger:</p>
+            <div style="margin-top:8px;">
+              <a href="mailto:josshua.belisario@gmail.com" class="social-btn btn-gm">Gmail</a>
+              <a href="https://www.facebook.com/HektorGrr/" target="_blank" class="social-btn btn-fb" style="margin-top:5px;">Facebook</a>
+            </div>
+          </td>
+          <td>
+            <div id="perfil-2007">
+              <h2>Perfil y Orígenes de Héctor García (HEKBEL)</h2>
+              <p style="font-size:12px; line-height:1.6;">
+                ¡Hola! Mi nombre es <strong>Héctor José García Belisario</strong> (conocido en la red como <strong>HEKBEL</strong> o Josshua Di'Luzbel). Vivo en Anzoátegui, Venezuela. Apasionado por desarmar circuitos, entender la física y la lógica de los sistemas.
+              </p>
+              <br>
+              <p style="font-size:12px; line-height:1.6;">
+                <strong>Visión de Vida (2007):</strong> Comprender las bases técnicas del hardware y el software desde su nivel más bajo (ensamblador, electrónica analógica) para luego construir proyectos autónomos.
+              </p>
+            </div>
+
+            <div id="tech-2007" style="margin-top:20px;">
+              <h2>Intereses Técnicos de la Época</h2>
+              <ul style="font-size:12px; padding-left:20px; line-height:1.8;">
+                <li>Servidores dedicados minimalistas con Linux 32-bits en procesadores Intel Pentium 4.</li>
+                <li>Redes inalámbricas caseras, antenas Wi-Fi direccionales de alto dBi y cálculo de atenuación coaxial.</li>
+                <li>Estudio de ciencias biológicas y cardiovascular (estructuras del corazón y fisiología).</li>
+              </ul>
+            </div>
+
+            <a href="mailto:josshua.belisario@gmail.com" class="btn-cv">📄 Solicitar Currículum (PDF)</a>
+          </td>
+        </tr>
+      </table>
+      
+      <footer style="margin-top:20px; text-align:center; font-size:10px; color:#666; border-top:1px solid #ccc; padding-top:10px;">
+        Copyright © 2007 HEKBEL - QuetzalNexuz Corp. Todos los derechos reservados.
+      </footer>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       SECCIÓN 2: AÑO 2011 (Skeuomorphism / Madera & Texturas)
+       ========================================================= -->
+  <section id="era-2011" class="era-section era-2011">
+    <div class="container">
+      <header>
+        <div class="ribbon">EDICIÓN 2011</div>
+        <h1 style="font-size:32px; font-weight:normal;">HEKBEL Studio '11</h1>
+        <p style="font-size:14px; color:#d9c3b0; font-style:italic;">Tecnología, Servidores Legacy & Estética Analógica</p>
+      </header>
+
+      <div style="padding: 25px;">
+        <div class="paper-card">
+          <h2 style="color:#8c2b2b; font-size:20px; margin-bottom:10px;">🎨 Estética Web 2011: Esqueuomorfismo</h2>
+          <p style="font-size:13px; color:#555; line-height:1.6;">
+            En 2011 la web imitaba el mundo real: texturas de papel de costura, fondo de madera oscura, bordes redondeados artesanales y sombreados realistas.
+          </p>
+        </div>
+
+        <div class="paper-card">
+          <h2 style="color:#2c211b; font-size:20px; margin-bottom:10px;">Desarrollo Android & Servidores Headless</h2>
+          <p style="font-size:14px; line-height:1.7;">
+            Mi enfoque evoluciona hacia la optimización extrema de sistemas:
+          </p>
+          <ul style="margin-left:20px; margin-top:10px; font-size:13px; line-height:1.8;">
+            <li><strong>Servidores Web Headless:</strong> Configuración de distribuciones ultraligeras (Debian 32-bit / Alpine) en hardware antiguo sin entorno gráfico.</li>
+            <li><strong>Sistemas Android:</strong> Exploración temprana de arquitectura de aplicaciones Android (Java), gestión de permisos y ROMs personalizadas.</li>
+            <li><strong>Cultura Gamer & Lore:</strong> Análisis profundo de las decisiones morales y atmósfera en sagas como <em>BioShock 1 & 2</em> y <em>Metro: Last Light</em>.</li>
+          </ul>
+        </div>
+
+        <div class="paper-card">
+          <h2 style="color:#2c211b; font-size:18px; margin-bottom:10px;">Contacto & Redes (2011)</h2>
+          <div class="social-links">
+            <a href="https://wa.me/584148416257" target="_blank" class="social-btn btn-wa">WhatsApp</a>
+            <a href="mailto:josshua.belisario@gmail.com" class="social-btn btn-gm">Gmail</a>
+            <a href="https://www.facebook.com/HektorGrr/" target="_blank" class="social-btn btn-fb">Facebook</a>
+            <a href="https://x.com/Hekuta369" target="_blank" class="social-btn btn-x">Twitter (X)</a>
+            <a href="https://m.youtube.com/@hekuta3698/featured" target="_blank" class="social-btn btn-yt">YouTube</a>
+          </div>
+          <a href="mailto:josshua.belisario@gmail.com?subject=Solicitud%20CV%20HEKBEL" class="btn-stitched">Descargar CV HEKBEL</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       SECCIÓN 3: AÑO 2015 (Material Design / Flat Colors)
+       ========================================================= -->
+  <section id="era-2015" class="era-section era-2015">
+    <header>
+      <div class="header-content">
+        <div style="width:60px; height:60px; background:#fff; border-radius:50%; padding:10px;">
+          <svg viewBox="0 0 200 200"><path d="M100 15 L165 52 L165 128 L100 165 L35 128 L35 52 Z" stroke="#009688" stroke-width="12" fill="none"/><path d="M70 60 L70 140 M130 60 L130 140 M70 100 L130 100" stroke="#009688" stroke-width="12"/></svg>
+        </div>
+        <div>
+          <h1 style="font-size:28px; font-weight:300;">HEKBEL Portfolio 2015</h1>
+          <p style="font-size:14px; opacity:0.8;">Material Design & Innovación Móvil</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-container">
+      <div class="card">
+        <h2>🎨 Tendencia 2015: Material Design & Flat UI</h2>
+        <p style="line-height:1.6; font-size:14px; color:#666;">
+          Google revoluciona la web con Material Design: colores planos vibrantes, sombras de elevación, fuentes limpias como Roboto y tarjetas responsivas.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Proyectos Android DIY & Hardware Personalizado</h2>
+        <p style="line-height:1.7; font-size:14px;">
+          Durante esta época, destaco por soluciones ingeniosas de bajo costo:
+        </p>
+        <ul style="margin-left:20px; margin-top:10px; line-height:1.8; font-size:14px;">
+          <li><strong>Transformación Smartphone a IR Universal:</strong> Proyecto DIY para convertir un smartphone antiguo en control remoto infrarrojo conectado a Google Assistant mediante la salida de audio jack.</li>
+          <li><strong>Optimización de Kernel:</strong> Uso de herramientas avanzadas como Kernel Adiutor / Franco Kernel Manager para underclocking y eficiencia energética.</li>
+          <li><strong>Seguridad de Red:</strong> Configuración de firewalls sin root mediante NetGuard.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Conecta conmigo (2015)</h2>
+        <div class="social-links">
+          <a href="https://wa.me/584148416257" target="_blank" class="social-btn btn-wa">WhatsApp</a>
+          <a href="https://t.me/+584148416257" target="_blank" class="social-btn btn-tg">Telegram</a>
+          <a href="https://www.instagram.com/hektorgrr/?hl=es" target="_blank" class="social-btn btn-ig">Instagram</a>
+          <a href="https://www.facebook.com/HektorGrr/" target="_blank" class="social-btn btn-fb">Facebook</a>
+          <a href="https://m.youtube.com/@hekuta3698/featured" target="_blank" class="social-btn btn-yt">YouTube</a>
+        </div>
+        <br>
+        <a href="mailto:josshua.belisario@gmail.com" class="flat-btn">Descargar Currículum</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       SECCIÓN 4: AÑO 2018 (Neomorphism / Dark Mode / Trading)
+       ========================================================= -->
+  <section id="era-2018" class="era-section era-2018">
+    <div class="neo-container">
+      <div class="neo-card">
+        <div class="accent-bar"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h1 style="font-size:30px; font-weight:800;">HEKBEL // 2018</h1>
+            <p style="color:#888; font-size:14px; margin-top:4px;">Smart Money Concepts (SMC) & Neomorfismo</p>
+          </div>
+          <span class="tag">Nace el Modo Oscuro</span>
+        </div>
+      </div>
+
+      <div class="neo-card">
+        <h2 style="font-size:20px; margin-bottom:15px;">🎨 Avance 2018: Neomorfismo & Modo Oscuro</h2>
+        <p style="line-height:1.7; font-size:14px; color:#aaa;">
+          Aparece la primera gran ola del <strong>Modo Oscuro</strong> nativo en sitios web y el diseño Neomórfico (sombras suaves extruidas sobre fondos oscuros y gamer). <em>¡Nota como arriba a la derecha ahora puedes presionar el botón de Modo Claro/Oscuro!</em>
+        </p>
+      </div>
+
+      <div class="neo-card">
+        <h2 style="font-size:20px; margin-bottom:15px;">Trading de Alta Precisión (SMC) & Energía Solar</h2>
+        <span class="tag">Forex EUR/USD</span><span class="tag">MetaTrader / Exness</span><span class="tag">Inversores Solares</span>
+        <p style="line-height:1.7; font-size:14px; margin-top:10px;">
+          Evolución hacia la libertad financiera y tecnológica:
+        </p>
+        <ul style="margin-left:20px; margin-top:10px; line-height:1.8; font-size:14px; color:#ccc;">
+          <li><strong>Smart Money Concepts (SMC):</strong> Análisis institucional en EUR/USD utilizando Order Blocks, BOS (Rompimientos de Estructura), CHoCH (Cambios de Carácter) y FVG (Fair Value Gaps).</li>
+          <li><strong>Energía Solar Híbrida:</strong> Evaluación técnica de inversores solares de 3.5 kVA y 5.5 kVA para la gestión de picos de arranque en electrodomésticos e inverters.</li>
+          <li><strong>Estética & Gustos:</strong> Afinidad por la cultura gamer oscura estilo <em>Devil May Cry 5</em> (Dante & Vergil) y fotografía estilo Polaroid.</li>
+        </ul>
+      </div>
+
+      <div class="neo-card">
+        <h2 style="font-size:18px; margin-bottom:15px;">Redes Sociales & Contacto</h2>
+        <div class="social-links">
+          <a href="https://wa.me/584148416257" target="_blank" class="social-btn btn-wa">WhatsApp</a>
+          <a href="https://t.me/+584148416257" target="_blank" class="social-btn btn-tg">Telegram</a>
+          <a href="https://www.instagram.com/hektorgrr/?hl=es" target="_blank" class="social-btn btn-ig">Instagram</a>
+          <a href="https://x.com/Hekuta369" target="_blank" class="social-btn btn-x">X (Twitter)</a>
+          <a href="https://m.twitch.tv/hekuta369/home" target="_blank" class="social-btn btn-tw">Twitch</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       SECCIÓN 5: AÑO 2022 (Glassmorphism / Bento Grid)
+       ========================================================= -->
+  <section id="era-2022" class="era-section era-2022">
+    <div class="bento-grid">
+      <div class="glass-card span-12">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+          <div>
+            <h1 style="font-size:36px; font-weight:800; background:linear-gradient(90deg, #a855f7, #00d2ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">HEKBEL Bento OS 2022</h1>
+            <p style="color:#aaa; font-size:14px; margin-top:5px;">Glassmorphism, Bento Layouts & QuetzalNexuz Branding</p>
+          </div>
+          <div style="font-size:12px; background:rgba(255,255,255,0.1); padding:6px 16px; border-radius:20px;">
+            Anzoátegui, Venezuela 📍
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card span-8">
+        <h2 style="font-size:22px; color:#00c6ff; margin-bottom:12px;">🎨 Tendencia 2022: Glassmorphic Bento Grid</h2>
+        <p style="font-size:14px; line-height:1.7; color:#ddd;">
+          El diseño web se vuelve ultra estilizado con tarjetas en retícula (Bento Grid), bordes traslúcidos con desenfoque de fondo (<code>backdrop-filter</code>) y gradientes de neón suave.
+        </p>
+      </div>
+
+      <div class="glass-card span-4">
+        <h3 style="color:#a855f7; margin-bottom:10px;">Familia & Vida</h3>
+        <p style="font-size:13px; line-height:1.6; color:#ccc;">
+          Padre de familia (esposa, un hijo y una hija). Equilibrio entre la tecnología de punta, el trading financiero y la vida personal en hogar propio.
+        </p>
+      </div>
+
+      <div class="glass-card span-6">
+        <h3 style="color:#00e5ff; margin-bottom:10px;">Creación de Contenido & Multimedia</h3>
+        <ul style="font-size:13px; line-height:1.7; color:#bbb; padding-left:15px;">
+          <li>Creación de identidad corporativa bajo <strong>QuetzalNexuz Corp</strong> (logos dorados/negros, flor de loto y dragones).</li>
+          <li>Configuración de Google TV, reprogramación con Button Mapper y Stremio con repositorios personalizados.</li>
+          <li>Vlogs de ASMR silencioso y crecimiento en YouTube.</li>
+        </ul>
+      </div>
+
+      <div class="glass-card span-6">
+        <h3 style="color:#ff007f; margin-bottom:10px;">Cultura Anime & Manga Aesthetics</h3>
+        <p style="font-size:13px; line-height:1.7; color:#bbb;">
+          Influencias visuales dinámicas de alto impacto: <em>Solo Leveling</em>, <em>Jujutsu Kaisen</em> (técnicas y mudras como Taishakuten-In) y la estética de <em>To Be Hero X</em>.
+        </p>
+      </div>
+
+      <div class="glass-card span-12">
+        <h3 style="margin-bottom:15px;">Canales Directos de Contacto (2022)</h3>
+        <div class="social-links">
+          <a href="https://wa.me/584148416257" target="_blank" class="social-btn btn-wa">WhatsApp</a>
+          <a href="https://t.me/+584148416257" target="_blank" class="social-btn btn-tg">Telegram</a>
+          <a href="https://www.tiktok.com/@josshua_fx" target="_blank" class="social-btn btn-tk">TikTok</a>
+          <a href="https://m.twitch.tv/hekuta369/home" target="_blank" class="social-btn btn-tw">Twitch</a>
+          <a href="https://www.instagram.com/hektorgrr/?hl=es" target="_blank" class="social-btn btn-ig">Instagram</a>
+          <a href="https://m.youtube.com/@hekuta3698/featured" target="_blank" class="social-btn btn-yt">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       SECCIÓN 6: AÑO 2026 (Spatial HUD / Cyberpunk Futuristic Core)
+       ========================================================= -->
+  <section id="era-2026" class="era-section era-2026">
+    <div class="cyber-grid"></div>
+
+    <div class="hud-container">
+      <div class="ticker">
+        <span>EUR/USD SMC: ORDER BLOCK DETECTED [0.0012 FVG]</span> |
+        <span>HEKBEL OS v2026.9 ONLINE</span> |
+        <span>ANZOÁTEGUI HUB: ACTIVE</span> |
+        <span>SOLAR HYBRID: 5.5 kVA OPTIMAL</span>
+      </div>
+
+      <div class="hud-card" style="display:flex; gap:30px; align-items:center; flex-wrap:wrap;">
+        <div style="width:110px; height:110px; flex-shrink:0;">
+          <svg class="hekbel-svg" viewBox="0 0 200 200">
+            <path d="M100 15 L165 52 L165 128 L100 165 L35 128 L35 52 Z" stroke="#00e5ff" stroke-width="8" fill="none"/>
+            <path d="M60 55 L80 55 L80 125 L60 125 Z" fill="#00e5ff"/>
+            <path d="M120 55 L140 55 L140 125 L120 125 Z" fill="#00e5ff"/>
+            <path d="M80 82 L140 70 L140 85 L80 97 Z" fill="#00e5ff"/>
+            <text x="100" y="188" font-family="'Orbitron', sans-serif" font-size="18" font-weight="900" fill="#00e5ff" text-anchor="middle">HEKBEL</text>
+          </svg>
+        </div>
+        <div style="flex-grow:1;">
+          <h1 style="font-size:38px; font-weight:900; letter-spacing:2px; color:#ffffff;">HEKBEL Core 2026</h1>
+          <p style="color:#00e5ff; font-size:14px; letter-spacing:1px; margin-top:5px;">
+            HÉCTOR JOSÉ GARCÍA BELISARIO | PORTFOLIO EXECUTIVE
+          </p>
+          <p style="font-size:12px; color:#888; margin-top:8px;">
+            Desarrollado en alianza estratégica con <strong>QuetzalNexuz Corp</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="hud-card">
+        <h2 style="font-size:20px; color:#00e5ff; margin-bottom:12px;">🚀 Tendencias Web 2026: Spatial Interfaces & AI Real-Time HUD</h2>
+        <p style="font-size:14px; line-height:1.7; color:#cbd5e1;">
+          La web del 2026 fusiona interfaces espaciales holográficas, respuestas fluidas micro-animadas, renderizado 3D integrado y visualización de datos en tiempo real.
+        </p>
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
+        <div class="hud-card">
+          <h3 style="color:#ffd700; font-size:16px; margin-bottom:10px;">📊 Perfil Físico & Biográfico (2026)</h3>
+          <ul style="font-size:13px; line-height:1.8; color:#94a3b8; list-style:none;">
+            <li>🔹 <strong>Edad:</strong> 25 años</li>
+            <li>🔹 <strong>Estatura / Peso:</strong> 1.71 m / ~66 kg</li>
+            <li>🔹 <strong>Ubicación:</strong> Residencia propia en Anzoátegui, Venezuela</li>
+            <li>🔹 <strong>Núcleo Familiar:</strong> Esposa, un hijo y una hija</li>
+          </ul>
+        </div>
+
+        <div class="hud-card">
+          <h3 style="color:#00e5ff; font-size:16px; margin-bottom:10px;">📈 Dominio SMC & Trading Institucional</h3>
+          <p style="font-size:13px; line-height:1.6; color:#94a3b8;">
+            Operativa avanzada Top-Down Analysis en Forex (EUR/USD) vía MetaTrader & Exness. Aplicación de Order Blocks, BOS, CHoCH, FVG y gestión de tomas parciales con estricto control de riesgo.
+          </p>
+        </div>
+
+        <div class="hud-card">
+          <h3 style="color:#ff0055; font-size:16px; margin-bottom:10px;">🛠️ Ingeniería & Ecosistema Técnico</h3>
+          <p style="font-size:13px; line-height:1.6; color:#94a3b8;">
+            Android Studio (Kotlin/Java), sistemas Linux 32-bit/Alpine headless, sistemas de energía solar híbridos (3.5kVA/5.5kVA), automatizaciones de Google TV y fotografía réflex Sony.
+          </p>
+        </div>
+      </div>
+
+      <div class="hud-card" style="text-align:center; margin-top:20px;">
+        <h3 style="font-size:20px; color:#ffffff; margin-bottom:15px;">🌐 Conexión & Redes Oficiales (2026)</h3>
+        <p style="font-size:13px; color:#94a3b8; margin-bottom:20px;">
+          Haz clic en cualquiera de los canales oficiales para iniciar comunicación inmediata:
+        </p>
+
+        <div class="social-links" style="justify-content:center;">
+          <a href="https://wa.me/584148416257" target="_blank" class="social-btn btn-wa">WhatsApp (+58 4148416257)</a>
+          <a href="https://t.me/+584148416257" target="_blank" class="social-btn btn-tg">Telegram</a>
+          <a href="mailto:josshua.belisario@gmail.com" class="social-btn btn-gm">Gmail</a>
+          <a href="https://www.facebook.com/HektorGrr/" target="_blank" class="social-btn btn-fb">Facebook</a>
+          <a href="https://www.instagram.com/hektorgrr/?hl=es" target="_blank" class="social-btn btn-ig">Instagram</a>
+          <a href="https://www.tiktok.com/@josshua_fx" target="_blank" class="social-btn btn-tk">TikTok</a>
+          <a href="https://m.youtube.com/@hekuta3698/featured" target="_blank" class="social-btn btn-yt">YouTube</a>
+          <a href="https://x.com/Hekuta369" target="_blank" class="social-btn btn-x">X / Twitter</a>
+          <a href="https://m.twitch.tv/hekuta369/home" target="_blank" class="social-btn btn-tw">Twitch</a>
+        </div>
+
+        <div style="margin-top:25px;">
+          <a href="javascript:void(0)" onclick="downloadCV()" class="btn-cv">📥 DESCARGAR CURRÍCULUM COMPLETO (HEKBEL 2026)</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       LÓGICA JAVASCRIPT
+       ========================================================= -->
+  <script>
+    // Años configurados
+    const eras = [2007, 2011, 2015, 2018, 2022, 2026];
+    let currentEraIndex = 0; // Inicia en 2007 (el año más antiguo)
+
+    // Animación de carga tipo Windows al iniciar
+    window.addEventListener('load', () => {
+      const statusText = document.getElementById('boot-status-text');
+      const bootScreen = document.getElementById('windows-boot');
+
+      setTimeout(() => { statusText.innerText = "Inicializando entorno gráfico HEKBEL..."; }, 800);
+      setTimeout(() => { statusText.innerText = "Cargando archivo histórico 2007..."; }, 1600);
+      setTimeout(() => {
+        bootScreen.style.transition = "opacity 0.6s ease";
+        bootScreen.style.opacity = "0";
+        setTimeout(() => {
+          bootScreen.style.display = "none";
+        }, 600);
+      }, 2400);
+
+      updateUI();
+    });
+
+    // Función para cambiar de año (Upgrade / Downgrade)
+    function changeYear(direction) {
+      const newIndex = currentEraIndex + direction;
+      if (newIndex >= 0 && newIndex < eras.length) {
+        currentEraIndex = newIndex;
+        updateUI();
+      }
+    }
+
+    // Actualizar vista según el año seleccionado
+    function updateUI() {
+      const currentYear = eras[currentEraIndex];
+
+      // Actualizar el badge del panel flotante
+      document.getElementById('current-year-badge').innerText = currentYear;
+
+      // Habilitar/deshabilitar botones de navegación
+      document.getElementById('btn-downgrade').disabled = (currentEraIndex === 0);
+      document.getElementById('btn-upgrade').disabled = (currentEraIndex === eras.length - 1);
+
+      // Ocultar todas las secciones y activar la del año correspondiente
+      document.querySelectorAll('.era-section').forEach(sec => {
+        sec.classList.remove('active');
+      });
+      const activeSection = document.getElementById(`era-${currentYear}`);
+      if (activeSection) {
+        activeSection.classList.add('active');
+      }
+
+      // Activar el botón de modo claro/oscuro ÚNICAMENTE desde 2018 en adelante
+      const themeBox = document.getElementById('theme-toggle-box');
+      if (currentYear >= 2018) {
+        themeBox.style.display = 'block';
+      } else {
+        themeBox.style.display = 'none';
+        document.body.classList.remove('light-mode'); // Forzar modo por defecto en eras antiguas
+      }
+
+      // Scroll suave hacia arriba
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Lógica para alternar Modo Oscuro / Claro (Disponible desde 2018)
+    const themeBtn = document.getElementById('theme-btn');
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      if (document.body.classList.contains('light-mode')) {
+        themeBtn.innerText = '☀️';
+      } else {
+        themeBtn.innerText = '🌙';
+      }
+    });
+
+    // Función interactiva para descargar Currículum generado
+    function downloadCV() {
+      const cvContent = `=====================================================
+CURRÍCULUM VITAE - HÉCTOR JOSÉ GARCÍA BELISARIO (HEKBEL)
+=====================================================
+Ubicación: Anzoátegui, Venezuela
+Contacto: +58 4148416257 | josshua.belisario@gmail.com
+Proveedor / Branding: QuetzalNexuz Corp
+
+RESUMEN EJECUTIVO:
+Trader especializado en Smart Money Concepts (SMC) en Forex (EUR/USD),
+Desarrollador Android (Kotlin/Java) y Especialista en Hardware/Sistemas Linux Headless.
+
+ÁREAS DE EXPERIENCIA:
+1. Trading SMC: MetaTrader / Exness, Order Blocks, BOS, CHoCH, FVG.
+2. Android Dev & Hardware DIY: Custom ROMs, Underclocking de Kernel, Firewall NetGuard, IR Remote por Audio Jack.
+3. Servidores & Redes: Linux 32-bit (Debian, Alpine) en Pentium 4 / Intel N150, Antenas Wi-Fi de alto dBi.
+4. Energía Solar: Inversores híbridos 3.5kVA / 5.5kVA, cálculo de picos de arranque.
+
+REDES SOCIALES Y PORTAFOLIO:
+- Facebook: https://www.facebook.com/HektorGrr/
+- Instagram: https://www.instagram.com/hektorgrr/?hl=es
+- TikTok: https://www.tiktok.com/@josshua_fx
+- YouTube: https://m.youtube.com/@hekuta3698/featured
+- X: https://x.com/Hekuta369
+- Twitch: https://m.twitch.tv/hekuta369/home
+=====================================================`;
+
+      const blob = new Blob([cvContent], { type: 'text/plain;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "CV_HEKTO_GARCIA_HEKBEL.txt");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>
